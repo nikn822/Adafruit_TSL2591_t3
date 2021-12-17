@@ -2,7 +2,7 @@
 
 <img src="https://cdn-shop.adafruit.com/970x728/1980-07.jpg" height="300"/>
 
-This is an Arduino library for the TSL2591 digital luminosity (light) sensors. 
+This is an Teensy library for the TSL2591 digital luminosity (light) sensors. Note: the example code hasn't been tested yet.
 
 Pick one up at http://www.adafruit.com/products/1980
 
