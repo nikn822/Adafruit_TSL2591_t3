@@ -91,11 +91,18 @@ boolean Adafruit_TSL2591::begin() {			// ignore uint8_t addr
 	/* Enable I2C */
 	if (_iBus == WIRE1_BUS)
 	{
-		Wire1.begin(_iMode, _aAddress, _pins, _pullup, _iRate, _opeMode);
+		// Wire1.begin(_iMode, _aAddress, _pins, _pullup, _iRate, _opeMode);
+		Wire1.begin();
+	}
+	else if (_iBus == WIRE_BUS)
+	{
+		// Wire1.begin(_iMode, _aAddress, _pins, _pullup, _iRate, _opeMode);
+		Wire.begin();
 	}
 	else
 	{
-		Wire2.begin(_iMode, _aAddress, _pins, _pullup, _iRate, _opeMode);
+		// Wire2.begin(_iMode, _aAddress, _pins, _pullup, _iRate, _opeMode);
+		Wire2.begin();
 	}
 	/* Make sure we have the right device */
 	uint8_t id = read8(TSL2591_COMMAND_BIT | TSL2591_REGISTER_DEVICE_ID);
@@ -499,36 +506,54 @@ uint8_t Adafruit_TSL2591::read8(uint8_t reg) {
 	if (_iBus == WIRE1_BUS)
 	{
 		Wire1.beginTransmission(_aAddress); /// TO BE MODIFIED? NO
-#if ARDUINO >= 100
-		Wire.write((uint8_t)reg); /// TO BE MODIFIED? NO
-#else
+//#if ARDUINO >= 100
+//		Wire.write((uint8_t)reg); /// TO BE MODIFIED? NO
+//#else
 		Wire1.send(reg);
-#endif
+		//#endif
 		Wire1.endTransmission();
 		Wire1.requestFrom(_aAddress, (byte)1); /// TO BE MODIFIED? NO
-#if ARDUINO >= 100
-		value = Wire.read(); /// TO BE MODIFIED? NO
-#else
+//#if ARDUINO >= 100
+//		value = Wire.read(); /// TO BE MODIFIED? NO
+//#else
 		value = Wire1.readByte(); //// MODIFIED RB receive -> readByte
-#endif
+//#endif
+
+		return value;
+	}
+
+	else if (_iBus == WIRE_BUS) {
+		Wire.beginTransmission(_aAddress); /// TO BE MODIFIED? NO
+//#if ARDUINO >= 100
+//		Wire.write((uint8_t)reg); /// TO BE MODIFIED? NO
+//#else
+		Wire.send(reg);
+		//#endif
+		Wire.endTransmission();
+		Wire.requestFrom(_aAddress, (byte)1); /// TO BE MODIFIED? NO
+//#if ARDUINO >= 100
+//		value = Wire.read(); /// TO BE MODIFIED? NO
+//#else
+		value = Wire.readByte(); //// MODIFIED RB receive -> readByte
+//#endif
 
 		return value;
 	}
 	else
 	{
 		Wire2.beginTransmission(_aAddress); /// TO BE MODIFIED? NO
-#if ARDUINO >= 100
-		Wire1.write((uint8_t)reg); /// TO BE MODIFIED? NO
-#else
+#//if ARDUINO >= 100
+//		Wire1.write((uint8_t)reg); /// TO BE MODIFIED? NO
+//#else
 		Wire2.send(reg);
-#endif
+		//#endif
 		Wire2.endTransmission();
 		Wire2.requestFrom(_aAddress, (byte)1); /// TO BE MODIFIED? NO
-#if ARDUINO >= 100
-		value = Wire1.read(); /// TO BE MODIFIED? NO
-#else
+//#if ARDUINO >= 100
+//		value = Wire1.read(); /// TO BE MODIFIED? NO
+//#else
 		value = Wire2.readByte(); //// MODIFIED RB receive -> readByte
-#endif
+//#endif
 
 		return value;
 	}
@@ -544,44 +569,66 @@ uint16_t Adafruit_TSL2591::read16(uint8_t reg) {
 	if (_iBus == WIRE1_BUS)
 	{
 		Wire1.beginTransmission(_aAddress); /// TO BE MODIFIED? NO
-#if ARDUINO >= 100
-		Wire.write((uint8_t)reg); /// TO BE MODIFIED? NO
-#else
+//#if ARDUINO >= 100
+//		Wire.write((uint8_t)reg); /// TO BE MODIFIED? NO
+//#else
 		Wire1.send(reg);
-#endif
+		//#endif
 		Wire1.endTransmission();
 		// Wire.requestFrom(_aAddress, (byte)1); /// TO BE MODIFIED? NO
 		Wire1.requestFrom(_aAddress, (byte)2);
-#if ARDUINO >= 100
-		value = Wire.read(); /// TO BE MODIFIED? NO
-#else
+		//#if ARDUINO >= 100
+		//		value = Wire.read(); /// TO BE MODIFIED? NO
+		//#else
 		buffer[0] = Wire1.readByte(); //// MODIFIED RB receive -> readByte
 		buffer[1] = Wire1.readByte();
 
-#endif
+		//#endif
 
-		return ((uint16_t)buffer[0] << 8) | buffer[1];
+		return uint16_t(buffer[1]) << 8 | uint16_t(buffer[0]);
+	}
+	else if (_iBus == WIRE_BUS)
+	{
+		Wire.beginTransmission(_aAddress); /// TO BE MODIFIED? NO
+		//#if ARDUINO >= 100
+		//		Wire.write((uint8_t)reg); /// TO BE MODIFIED? NO
+		//#else
+		Wire.send(reg);
+		//#endif
+		Wire.endTransmission();
+		// Wire.requestFrom(_aAddress, (byte)1); /// TO BE MODIFIED? NO
+		Wire.requestFrom(_aAddress, (byte)2);
+		//#if ARDUINO >= 100
+		//		value = Wire.read(); /// TO BE MODIFIED? NO
+		//#else
+		buffer[0] = Wire.readByte(); //// MODIFIED RB receive -> readByte
+		buffer[1] = Wire.readByte();
+
+		//#endif
+
+		return uint16_t(buffer[1]) << 8 | uint16_t(buffer[0]);
 	}
 	else
 	{
 		Wire2.beginTransmission(_aAddress); /// TO BE MODIFIED? NO
-#if ARDUINO >= 100
-		Wire1.write((uint8_t)reg); /// TO BE MODIFIED? NO
-#else
+//#if ARDUINO >= 100
+//		Wire1.write((uint8_t)reg); /// TO BE MODIFIED? NO
+//#else
 		Wire2.send(reg);
-#endif
+		//#endif
 		Wire2.endTransmission();
 		Wire2.requestFrom(_aAddress, (byte)2); /// TO BE MODIFIED? NO
-#if ARDUINO >= 100
-		value = Wire1.read(); /// TO BE MODIFIED? NO
-#else
+//#if ARDUINO >= 100
+//		value = Wire1.read(); /// TO BE MODIFIED? NO
+//#else
 		buffer[0] = Wire2.readByte(); //// MODIFIED RB receive -> readByte
 		buffer[1] = Wire2.readByte();
-#endif
+		//#endif
 
-		return ((uint16_t)buffer[0] << 8) | buffer[1];
+		return uint16_t(buffer[1]) << 8 | uint16_t(buffer[0]);
 	}
 }
+
 
 void Adafruit_TSL2591::write8(uint8_t reg, uint8_t value) {
 	/*uint8_t buffer[2];
@@ -592,14 +639,29 @@ void Adafruit_TSL2591::write8(uint8_t reg, uint8_t value) {
 	if (_iBus == WIRE1_BUS)
 	{
 		Wire1.beginTransmission(_aAddress); //// MODIFIED RB
-#if ARDUINO >= 100
-		Wire.write((uint8_t)reg); /// TO BE MODIFIED? NO
-		Wire.write((uint8_t)value); /// TO BE MODIFIED? NO
-#else
+//#if ARDUINO >= 100
+//		Wire.write((uint8_t)reg); /// TO BE MODIFIED? NO
+//		Wire.write((uint8_t)value); /// TO BE MODIFIED? NO
+//#else
 		Wire1.send(reg); /// TO BE MODIFIED? NO
 		Wire1.send(value); /// TO BE MODIFIED? NO
-#endif
+//#endif
 		Wire1.endTransmission(); /// TO BE MODIFIED? NO
+
+		/* ToDo: Check for error! */
+		// return true;
+	}
+	else if (_iBus == WIRE_BUS)
+	{
+		Wire.beginTransmission(_aAddress); //// MODIFIED RB
+//#if ARDUINO >= 100
+//		Wire.write((uint8_t)reg); /// TO BE MODIFIED? NO
+//		Wire.write((uint8_t)value); /// TO BE MODIFIED? NO
+//#else
+		Wire.send(reg); /// TO BE MODIFIED? NO
+		Wire.send(value); /// TO BE MODIFIED? NO
+//#endif
+		Wire.endTransmission(); /// TO BE MODIFIED? NO
 
 		/* ToDo: Check for error! */
 		// return true;
@@ -607,13 +669,13 @@ void Adafruit_TSL2591::write8(uint8_t reg, uint8_t value) {
 	else
 	{
 		Wire2.beginTransmission(_aAddress); //// MODIFIED RB
-#if ARDUINO >= 100
-		Wire1.write((uint8_t)reg); /// TO BE MODIFIED? NO
-		Wire1.write((uint8_t)value); /// TO BE MODIFIED? NO
-#else
+//#if ARDUINO >= 100
+//		Wire1.write((uint8_t)reg); /// TO BE MODIFIED? NO
+//		Wire1.write((uint8_t)value); /// TO BE MODIFIED? NO
+//#else
 		Wire2.send(reg); /// TO BE MODIFIED? NO
 		Wire2.send(value); /// TO BE MODIFIED? NO
-#endif
+//#endif
 		Wire2.endTransmission(); /// TO BE MODIFIED? NO
 
 		/* ToDo: Check for error! */
@@ -629,14 +691,29 @@ void Adafruit_TSL2591::write8(uint8_t reg) {
 	if (_iBus == WIRE1_BUS)
 	{
 		Wire1.beginTransmission(_aAddress); //// MODIFIED RB
-#if ARDUINO >= 100
-		Wire.write((uint8_t)reg); /// TO BE MODIFIED? NO
-		// Wire.write((uint8_t)value); /// TO BE MODIFIED? NO
-#else
+//#if ARDUINO >= 100
+//		Wire.write((uint8_t)reg); /// TO BE MODIFIED? NO
+//		// Wire.write((uint8_t)value); /// TO BE MODIFIED? NO
+//#else
 		Wire1.send(reg); /// TO BE MODIFIED? NO
 		// Wire.send(value); /// TO BE MODIFIED? NO
-#endif
+//#endif
 		Wire1.endTransmission(); /// TO BE MODIFIED? NO
+
+		/* ToDo: Check for error! */
+		// return true;
+	}
+	if (_iBus == WIRE_BUS)
+	{
+		Wire.beginTransmission(_aAddress); //// MODIFIED RB
+//#if ARDUINO >= 100
+//		Wire.write((uint8_t)reg); /// TO BE MODIFIED? NO
+//		// Wire.write((uint8_t)value); /// TO BE MODIFIED? NO
+//#else
+		Wire.send(reg); /// TO BE MODIFIED? NO
+		// Wire.send(value); /// TO BE MODIFIED? NO
+//#endif
+		Wire.endTransmission(); /// TO BE MODIFIED? NO
 
 		/* ToDo: Check for error! */
 		// return true;
@@ -644,13 +721,13 @@ void Adafruit_TSL2591::write8(uint8_t reg) {
 	else
 	{
 		Wire2.beginTransmission(_aAddress); //// MODIFIED RB
-#if ARDUINO >= 100
-		Wire1.write((uint8_t)reg); /// TO BE MODIFIED? NO
+//#if ARDUINO >= 100
+//		Wire1.write((uint8_t)reg); /// TO BE MODIFIED? NO
 		// Wire1.write((uint8_t)value); /// TO BE MODIFIED? NO
-#else
+//#else
 		Wire2.send(reg); /// TO BE MODIFIED? NO
 		// Wire1.send(value); /// TO BE MODIFIED? NO
-#endif
+//#endif
 		Wire2.endTransmission(); /// TO BE MODIFIED? NO
 
 		/* ToDo: Check for error! */

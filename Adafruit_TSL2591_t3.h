@@ -106,7 +106,7 @@ typedef enum {
 	TSL2591_GAIN_MAX = 0x30,  /// max gain (9876x)
 } tsl2591Gain_t;
 
-enum i2c_bus { WIRE1_BUS, WIRE2_BUS };   // ADDED
+enum i2c_bus { WIRE_BUS, WIRE1_BUS, WIRE2_BUS };   // ADDED
 /**************************************************************************/
 /*!
 	@brief  Class that stores state and functions for interacting with TSL2591
