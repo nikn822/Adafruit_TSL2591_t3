@@ -47,6 +47,7 @@
 
 #include "Adafruit_TSL2591_t3.h"
 #include <stdlib.h>
+#define _aAddress 0x29
 
 /**************************************************************************/
 /*!
@@ -56,22 +57,13 @@
 */
 /**************************************************************************/
 // CHANGED
-Adafruit_TSL2591::Adafruit_TSL2591(i2c_bus iBus, int32_t sensorID, uint8_t aAddress, i2c_mode iMode, i2c_pins pins, i2c_pullup pullup, i2c_rate iRate, i2c_op_mode opeMode) {
+Adafruit_TSL2591::Adafruit_TSL2591(i2c_bus iBus, int32_t sensorID, uint8_t aAddress) {
 	_initialized = false;
 	_integration = TSL2591_INTEGRATIONTIME_100MS;
 	_gain = TSL2591_GAIN_MED;
 	_sensorID = sensorID;
 	_iBus = iBus; // ADDED RB 0 for Wire() and 1 for Wire1();
 	_sensorID = sensorID;
-	_aAddress = aAddress;
-	_iMode = iMode;         // ADDED RB
-	_pins = pins;           // ADDED RB
-	_pullup = pullup;       // ADDED RB
-	_iRate = iRate;           // ADDED RB
-	_opeMode = opeMode;       // ADDED RB
-
-	// we cant do wire initialization till later, because we havent loaded Wire
-	// yet
 }
 
 /*/Adafruit_TSL2591::~Adafruit_TSL2591() {
@@ -91,17 +83,14 @@ boolean Adafruit_TSL2591::begin() {			// ignore uint8_t addr
 	/* Enable I2C */
 	if (_iBus == WIRE1_BUS)
 	{
-		// Wire1.begin(_iMode, _aAddress, _pins, _pullup, _iRate, _opeMode);
 		Wire1.begin();
 	}
 	else if (_iBus == WIRE_BUS)
 	{
-		// Wire1.begin(_iMode, _aAddress, _pins, _pullup, _iRate, _opeMode);
 		Wire.begin();
 	}
 	else
 	{
-		// Wire2.begin(_iMode, _aAddress, _pins, _pullup, _iRate, _opeMode);
 		Wire2.begin();
 	}
 	/* Make sure we have the right device */
