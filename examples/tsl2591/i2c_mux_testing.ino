@@ -34,8 +34,8 @@ void tcaselect2(uint8_t i) {
   Wire2.endTransmission();  
 }
 
-Adafruit_TSL2591 tsl1 = Adafruit_TSL2591(WIRE1_BUS, -1, 0x29, I2C_MASTER, I2C_PINS_37_38, I2C_PULLUP_INT, I2C_RATE_100, I2C_OP_MODE_ISR);
-Adafruit_TSL2591 tsl2 = Adafruit_TSL2591(WIRE2_BUS, -1, 0x29, I2C_MASTER, I2C_PINS_37_38, I2C_PULLUP_INT, I2C_RATE_100, I2C_OP_MODE_ISR);
+Adafruit_TSL2591 tsl1 = Adafruit_TSL2591(WIRE1_BUS, -1);
+Adafruit_TSL2591 tsl2 = Adafruit_TSL2591(WIRE2_BUS, -1);
 
 void simpleRead(Adafruit_TSL2591 tsl)
 {
