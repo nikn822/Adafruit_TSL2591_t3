@@ -118,7 +118,7 @@ public:
 	
 	// Default Constructor
 	// Adafruit_TSL2591(i2c_bus iBus = WIRE_BUS, int32_t sensorID = -1, uint8_t aAddress = TSL2591_ADDR, i2c_mode iMode = I2C_MASTER, i2c_pins pins = I2C_PINS_18_19, i2c_pullup pullup = I2C_PULLUP_INT, i2c_rate iRate = I2C_RATE_100, i2c_op_mode opeMode = I2C_OP_MODE_ISR); // MODIFIED
-	Adafruit_TSL2591(i2c_bus iBus, int32_t sensorID, uint8_t aAddress, i2c_mode iMode, i2c_pins pins, i2c_pullup pullup, i2c_rate iRate, i2c_op_mode opeMode);
+	Adafruit_TSL2591(i2c_bus iBus, int32_t sensorID);
 	// Adafruit_TSL2591(int32_t sensorID = -1);
 	// ~Adafruit_TSL2591();
 
@@ -163,10 +163,5 @@ private:
 	boolean _initialized;
 	// ADDED RB :
 	i2c_bus _iBus; // Wire or Wire 1
-	i2c_mode _iMode; // MASTER OR SLAVE MODE
-	i2c_pins _pins;
-	i2c_pullup _pullup;
-	i2c_rate _iRate;
-	i2c_op_mode _opeMode;
-};
+	};
 #endif
